@@ -8,6 +8,8 @@ import static cloud.autotests.helpers.AttachmentsHelper.*;
 import static cloud.autotests.helpers.BrowserstackHelper.getBSPublicLink;
 import static cloud.autotests.helpers.DriverHelper.*;
 import static cloud.autotests.helpers.EnvironmentHelper.*;
+import static cloud.autotests.utils.RandomUtils.getRandomInt;
+import static cloud.autotests.utils.RandomUtils.getRandomMessage;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.logevents.SelenideLogger.addListener;
 
@@ -19,10 +21,16 @@ public class TestBase {
             DEFAULT_LOGIN = "Alex",
             DEFAULT_PASSWORD = "12345";
 
+    public static int randomInt;
+    public static String randomMessage;
+
     @BeforeAll
     public static void beforeAll() {
         addListener("AllureSelenide", new AllureSelenide().screenshots(true).savePageSource(true));
         configureSelenide();
+        randomInt = getRandomInt(0001, 1001);
+        randomMessage = getRandomMessage(1, 6);
+
     }
 
     @AfterEach
@@ -32,8 +40,7 @@ public class TestBase {
         attachScreenshot("Last screenshot");
         attachPageSource();
 //        attachNetwork(); // todo
-        if (isWeb) attachAsText("Browser console logs", getConsoleLogs());
-        if (isIos || isAndroid) attachAsText("Browserstack build link", getBSPublicLink(sessionId));
+        attachAsText("Browser console logs", getConsoleLogs());
 
         closeWebDriver();
 
