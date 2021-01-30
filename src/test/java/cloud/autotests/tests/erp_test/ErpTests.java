@@ -160,4 +160,57 @@ public class ErpTests extends TestBase {
 
     }
 
+
+    @Test
+    @DisplayName("Создание автобуса в системе")
+    @Description("Успешное добавление моделей автобусов в базу данных")
+    void SuccessfulBusCreation() {
+
+        step("Заходим на сайт", () -> {
+            open("https://erp.erptour.ru/enter");
+        });
+        step("Заполняем поля", () -> {
+            $("#loginform-username").setValue("want");
+            $("#loginform-password").setValue("demo866").pressEnter();
+            $("html").shouldHave(text("Абрикосов Александр"));
+        });
+        step("Добавляем модель автобуса", () -> {
+            $(".sidebar-toggle").click();
+            $(byText("Транспорт")).click();
+            $(byText("Модели")).click();
+            $(byLinkText("Добавить")).click();
+            $("html").shouldHave(text("Модель автобуса"));
+        });
+        step("Заполняем марку автобуса", () -> {
+            $("#busmodel-mark").setValue("Ford");
+        });
+        step("Заполняем модель автобуса", () -> {
+            $("#busmodel-model").setValue("Tourneo " + randomInt);
+        });
+        step("Выбираем тип расположения сидений", () -> {
+            $("#busmodel-type_seat").click();
+            $(byText("2 - 1")).click();
+        });
+        step("Задаем количество мест", () -> {
+            $("#busmodel-number_seats").setValue("8");
+        });
+        step("Задаем количество мест заднего ряда", () -> {
+            $("#busmodel-number_back_seats").click();
+            $(byText("3")).click();
+        });
+        step("Задаем начальный номер", () -> {
+            $("#busmodel-start_number_seats").setValue("21");
+        });
+        step("Оставляем комментарий", () -> {
+            $("#busmodel-comment").setValue("Ford Tourneo - прекрасный выбор для взыскательных господ " + randomInt);
+        });
+        step("Нажимаем на кнопку Добавить", () -> {
+            $(".btn-success").click();
+        });
+        step("Проверяем успешное добавление автобуса в базу", () -> {
+            $("html").shouldHave(text("Ford / Tourneo"));
+        });
+
+    }
+
 }
