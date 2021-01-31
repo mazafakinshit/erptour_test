@@ -329,4 +329,44 @@ public class ErpTests extends TestBase {
         });
     }
 
+    @Test
+    @DisplayName("Создание наценок в системе")
+    @Description("Успешное добавление наценок в базу данных")
+    void SuccessfulSurchargeCreation() {
+
+        step("Заходим на сайт", () -> {
+            open("https://erp.erptour.ru/enter");
+        });
+        step("Заполняем поля", () -> {
+            $("#loginform-username").setValue("want");
+            $("#loginform-password").setValue("demo866").pressEnter();
+            $("html").shouldHave(text("Абрикосов Александр"));
+        });
+        step("Добавляем наценку", () -> {
+            $(".sidebar-toggle").click();
+            $(byText("Наценки")).click();
+            $(byLinkText("Добавить")).click();
+            $("html").shouldHave(text("Вариант наценки"));
+        });
+        step("Вводим название наценки", () -> {
+            $("#surcharge-name").setValue("Наценка " + randomInt);
+        });
+        step("Вводим сумму наценки", () -> {
+            $("#surcharge-sum").setValue(" " + randomInt);
+        });
+        step("Выбираем тип наценки", () -> {
+            $("#surcharge-type").click();
+            $(byText("Проживание (+ к проживанию/день)")).click();
+        });
+        step("Оставляем комментарий", () -> {
+            $("#surcharge-comment").setValue("Первая в мире рандомная наценка");
+        });
+        step("Нажимаем кнопку Добавить", () -> {
+            $(".btn-success").click();
+        });
+        step("Проверяем успешное добавление варианта наценки в базу", () -> {
+            $("html").shouldHave(text("Варианты наценок"));
+        });
+    }
+
 }
