@@ -213,4 +213,47 @@ public class ErpTests extends TestBase {
 
     }
 
+    @Test
+    @DisplayName("Создание варианта размещения в системе")
+    @Description("Успешное добавление вариантов размещения в базу данных")
+    void SuccessfulAccomodationCreation() {
+
+        step("Заходим на сайт", () -> {
+            open("https://erp.erptour.ru/enter");
+        });
+        step("Заполняем поля", () -> {
+            $("#loginform-username").setValue("want");
+            $("#loginform-password").setValue("demo866").pressEnter();
+            $("html").shouldHave(text("Абрикосов Александр"));
+        });
+        step("Добавляем вариант размещения", () -> {
+            $(".sidebar-toggle").click();
+            $(byText("Места размещения")).click();
+            $(byLinkText("Добавить")).click();
+            $("html").shouldHave(text("Вариант размещения"));
+        });
+        step("Вводим название отеля", () -> {
+            $("#accommodation-name").setValue("Анапа " + randomMessage);
+        });
+        step("Вводим название номера", () -> {
+            $("#accommodation-name_room").setValue(randomMessage);
+        });
+        step("Вводим себестоимость проживания в сутки", () -> {
+            $("#accommodation-price").setValue("1000");
+        });
+        step("Вводим себестоимость питания в сутки", () -> {
+            $("#accommodation-food_price").setValue("350");
+        });
+        step("Оставляем комментарий", () -> {
+            $("#accommodation-comment").setValue("Все номера оборудованы кондиционером и прочими благами");
+        });
+        step("Нажимаем кнопку Добавить", () -> {
+            $(".btn-success").click();
+        });
+        step("Проверяем успешное добавление варианта размещения в базу", () -> {
+            $("html").shouldHave(text("Варианты размещения"));
+        });
+    }
+
+
 }
