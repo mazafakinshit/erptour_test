@@ -289,5 +289,44 @@ public class ErpTests extends TestBase {
         });
     }
 
+    @Test
+    @DisplayName("Создание комиссий в системе")
+    @Description("Успешное добавление агентских комиссий в базу данных")
+    void SuccessfulCommissionCreation() {
+
+        step("Заходим на сайт", () -> {
+            open("https://erp.erptour.ru/enter");
+        });
+        step("Заполняем поля", () -> {
+            $("#loginform-username").setValue("want");
+            $("#loginform-password").setValue("demo866").pressEnter();
+            $("html").shouldHave(text("Абрикосов Александр"));
+        });
+        step("Добавляем Агентскую комиссию", () -> {
+            $(".sidebar-toggle").click();
+            $(byText("Агентские комиссии")).click();
+            $(byLinkText("Добавить")).click();
+            $("html").shouldHave(text("Агентская комиссия"));
+        });
+        step("Вводим название комиссии", () -> {
+            $("#commission-name").setValue("Комиссия " + randomInt);
+        });
+        step("Вводим сумму комиссии", () -> {
+            $("#commission-sum").setValue(" " + randomInt);
+        });
+        step("Выбираем тип комиссии", () -> {
+            $("#commission-type").click();
+            $(byText("Агенская комиссия")).click();
+        });
+        step("Оставляем комментарий", () -> {
+            $("#commission-comment").setValue("Первая в мире рандомная комиссия");
+        });
+        step("Нажимаем кнопку Добавить", () -> {
+            $(".btn-success").click();
+        });
+        step("Проверяем успешное добавление агентской комиссии в базу", () -> {
+            $("html").shouldHave(text("Агентские коммиссии"));
+        });
+    }
 
 }
