@@ -255,5 +255,39 @@ public class ErpTests extends TestBase {
         });
     }
 
+    @Test
+    @DisplayName("Создание точек маршрута в системе")
+    @Description("Успешное добавление точек маршрута в базу данных")
+    void SuccessfulMapMarkerCreation() {
+
+        step("Заходим на сайт", () -> {
+            open("https://erp.erptour.ru/enter");
+        });
+        step("Заполняем поля", () -> {
+            $("#loginform-username").setValue("want");
+            $("#loginform-password").setValue("demo866").pressEnter();
+            $("html").shouldHave(text("Абрикосов Александр"));
+        });
+        step("Добавляем точку маршрута", () -> {
+            $(".sidebar-toggle").click();
+            $(byText("Точки маршрута")).click();
+            $(byLinkText("Добавить")).click();
+            $("html").shouldHave(text("Точка маршрута"));
+        });
+        step("Проводим поиск геоданных", () -> {
+            $("#address").setValue("Анапа").pressEnter();
+            $(byText("Анапа 353444, Anapa, Russia")).click();
+        });
+        step("Оставляем комментарий", () -> {
+            $("#location-comment").setValue("Очередной шикарный курорт в нашем списке");
+        });
+        step("Нажимаем кнопку Добавить", () -> {
+            $(".btn-success").click();
+        });
+        step("Проверяем успешное добавление точки маршрута в базу", () -> {
+            $("html").shouldHave(text("Точки маршрута"));
+        });
+    }
+
 
 }
