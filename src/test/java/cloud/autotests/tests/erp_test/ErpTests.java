@@ -369,4 +369,77 @@ public class ErpTests extends TestBase {
         });
     }
 
+    @Test
+    @DisplayName("Создание заказа в системе")
+    @Description("Успешное создание заказа тура в базе данных")
+    void SuccessfulOrderCreation() {
+
+        int randomInt1 = getRandomInt(1, 11);
+        int randomInt2 = getRandomInt(1, 5);
+
+
+        step("Заходим на сайт", () -> {
+            open("https://erp.erptour.ru/enter");
+        });
+        step("Заполняем поля", () -> {
+            $("#loginform-username").setValue("want");
+            $("#loginform-password").setValue("demo866").pressEnter();
+            $("html").shouldHave(text("Абрикосов Александр"));
+        });
+        step("Добавляем заказ", () -> {
+            $(".sidebar-toggle").click();
+            $(byText("Туры")).click();
+            $(byText("Заказы")).click();
+            $$(byLinkText("Добавить")).get(1).click();
+            $("html").shouldHave(text("Добавить тур"));
+            $(byLinkText("автобусный тур в Анапу399")).click();
+            $(byLinkText("Заказы")).click();
+            $(".btn-success").click();
+            $("html").shouldHave(text("Опции заказа тура"));
+        });
+        step("Выбираем место в автобусе", () -> {
+            $(byId(randomInt1 + "_" + randomInt2)).click();
+            //        $(byId("1_5")).click();
+        });
+        step("Выбираем размещение", () -> {
+            $("#order-accommodation_id").click();
+            $(byText("Анапа Soho Rooms - Standart (1000.00/350.00)")).click();
+        });
+        step("Выбираем количество дней", () -> {
+            $("#order-count_day").setValue("10");
+        });
+        step("Устанавливаем размер скидки", () -> {
+            $("#order-price_discount").setValue("0");
+        });
+        step("Устанавливаем размер надбавки", () -> {
+            $("#order-price_surcharge").setValue("" + randomInt);
+        });
+        step("Вводим данные пассажира", () -> {
+            $("#order-fio").setValue("Клиент " + randomInt);
+            $("#order-phone").setValue("0000000220");
+            $("#order-passport").setValue("0550000555");
+            $("#order-age").click();
+            $(byText("Взрослый")).click();
+            sleep(2000);
+            $("#order-self_arrival input").click();// Нет
+//            $("#order-self_arrival input", 1).click();// Да
+            $x("//*[@id=\"order-one_way\"]/label[1]/input").click();
+            $x("//*[@id=\"order-only_direction\"]/label[1]/input").click();
+            $x("//*[@id=\"order-without_food\"]/label[1]/input").click();
+            $("#order-price_dop_food").setValue("0");
+        });
+        step("Заполняем дополнительные поля", () -> {
+            $("#order-comment").setValue("Примечание менеджера " + randomInt);
+            $("#order-message").setValue("Сообщение клиента " + randomInt);
+        });
+        step("Указываем статус заказа и нажимаем Забронировать", () -> {
+            $("#order-status").click();
+            $(byText("Оплачен")).click();
+            $(byText("Забронировать")).click();
+        });
+        step("Проверяем успешное создание заказа в базе данных", () -> {
+            $("html").shouldHave(text("Изменения успешно сохранены"));
+        });
+    }
+
 }
